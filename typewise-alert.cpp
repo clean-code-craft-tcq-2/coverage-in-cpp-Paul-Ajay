@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <map>
 #include <vector>
+#include <iostream>
 
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   if(value < lowerLimit) {
@@ -63,18 +64,28 @@ void sendToController(BreachType breachType) {
   printf("%x : %x\n", header, breachType);
 }
 
+
+std::map<BreachType, std::string> breach_message_map = {
+  {BreachType::TOO_LOW, "Hi, the temperature is too low"},
+  {BreachType::TOO_HIGH, "Hi, the temperature is too high"}
+};
+
 void sendToEmail(BreachType breachType) {
   const char* recepient = "a.b@c.com";
-  switch(breachType) {
-    case TOO_LOW:
-      printf("To: %s\n", recepient);
-      printf("Hi, the temperature is too low\n");
-      break;
-    case TOO_HIGH:
-      printf("To: %s\n", recepient);
-      printf("Hi, the temperature is too high\n");
-      break;
-    case NORMAL:
-      break;
+  if(breachType != NORMAL) {
+    std::cout<<"To: "<< recepient<<std::endl;
+    std::cout<< breach_message_map[breachType] <<std::endl;
   }
+  // switch(breachType) {
+  //   case TOO_LOW:
+  //     printf("To: %s\n", recepient);
+  //     printf("Hi, the temperature is too low\n");
+  //     break;
+  //   case TOO_HIGH:
+  //     printf("To: %s\n", recepient);
+  //     printf("Hi, the temperature is too high\n");
+  //     break;
+  //   case NORMAL:
+  //     break;
+  // }
 }
