@@ -19,6 +19,6 @@ TEST_CASE("test interface class") {
   REQUIRE(emailTarget.targetInterface(NORMAL) == "");
   // REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
   TargectSelector controllerTarget(new Controller());
-  REQUIRE(controllerTarget.targetInterface(NORMAL) == "");
+  REQUIRE(controllerTarget.targetInterface(NORMAL) == "feed : 0");
   REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
 }
