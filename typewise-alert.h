@@ -22,31 +22,32 @@ typedef struct {
 
 class AlertTargetClass {
 public:
-  virtual void sendOutput(BreachType, void (*functionPointer)(std::string)) = 0;
+  virtual std::string sendOutput(BreachType) = 0;
 };
 class Controller : public AlertTargetClass {
 public:
-  virtual void sendOutput(BreachType breachType, void (*functionPointer)(std::string)) {
-    sendToController(breachType, *functionPointer);
+  virtual std::string sendOutput(BreachType breachType) {
+    return sendToController(breachType);
   }
 private:
-  void sendToController(BreachType breachType, void (*functionPointer)(std::string));
+  std::string sendToController(BreachType breachType);
 };
 class Email : public AlertTargetClass {
 public:
-  virtual void sendOutput(BreachType breachType, void (*functionPointer)(std::string)) {
-    sendToEmail(breachType, *functionPointer);
+  virtual std::string sendOutput(BreachType breachType) {
+    return sendToEmail(breachType);
   }
 private:
-  void sendToEmail(BreachType breachType, void (*functionPointer)(std::string));
+  std::string sendToEmail(BreachType breachType);
+  std::string recepient = "a.b@c.com";
 };
 class TargectSelector {
 public:
   TargectSelector( AlertTargetClass * const targetObject) :
   targetObject(targetObject) 
   {}
-  void targetInterface(BreachType breachType, void (*functionPointer)(std::string)) {
-    targetObject->sendOutput(breachType, *functionPointer);
+  std::string targetInterface(BreachType breachType) {
+    return targetObject->sendOutput(breachType);
   }
 private:
   AlertTargetClass *targetObject;   
