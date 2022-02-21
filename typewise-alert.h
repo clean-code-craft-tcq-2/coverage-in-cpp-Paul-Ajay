@@ -22,38 +22,35 @@ typedef struct {
 
 class AlertTargetClass {
 public:
-  virtual void sendOutput(BreachType, void (*fp)(std::string)) = 0;
+  virtual void sendOutput(BreachType, void (*functionPointer)(std::string)) = 0;
 };
 class Controller : public AlertTargetClass {
 public:
-  virtual void sendOutput(BreachType breachType, void (*fp)(std::string)) {
-    sendToController(breachType, fp);
+  virtual void sendOutput(BreachType breachType, void (*functionPointer)(std::string)) {
+    sendToController(breachType, *functionPointer);
   }
 private:
-  void sendToController(BreachType breachType, void (*fp)(std::string));
+  void sendToController(BreachType breachType, void (*functionPointer)(std::string));
 };
 class Email : public AlertTargetClass {
 public:
-  virtual void sendOutput(BreachType breachType, void (*fp)(std::string)) {
-    sendToEmail(breachType, fp);
+  virtual void sendOutput(BreachType breachType, void (*functionPointer)(std::string)) {
+    sendToEmail(breachType, *functionPointer);
   }
 private:
-  void sendToEmail(BreachType breachType, void (*fp)(std::string));
+  void sendToEmail(BreachType breachType, void (*functionPointer)(std::string));
 };
 class TargectSelector {
 public:
   TargectSelector( AlertTargetClass * const targetObject) :
   targetObject(targetObject) 
   {}
-  void targetInterface(BreachType breachType, void (*fp)(std::string)) {
-    targetObject->sendOutput(breachType, fp);
+  void targetInterface(BreachType breachType, void (*functionPointer)(std::string)) {
+    targetObject->sendOutput(breachType, *functionPointer);
   }
 private:
   AlertTargetClass *targetObject;   
 };
 
 void checkAndAlert(
-  TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*fp)(std::string));
-
-void sendToController(BreachType breachType, void (*fp)(std::string));
-void sendToEmail(BreachType breachType, void (*fp)(std::string));
+  TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string));

@@ -31,11 +31,11 @@ void consolePrint(std::string stringToPrint) {
   std::cout<<stringToPrint<<std::endl;
 }
 
-void Controller::sendToController(BreachType breachType, void (*fp)(std::string)) {
+void Controller::sendToController(BreachType breachType, void (*functionPointer)(std::string)) {
   const unsigned short header = 0xfeed;
   std::stringstream outputMessage;
   outputMessage << std::hex << header << " : " << std::hex << breachType;
-  fp(outputMessage.str());
+  (*functionPointer)(outputMessage.str());
 }
 
 std::map<BreachType, std::string> breachMessageMap = {
@@ -43,20 +43,20 @@ std::map<BreachType, std::string> breachMessageMap = {
   {BreachType::TOO_HIGH, "Hi, the temperature is too high"}
 };
 
-void Email::sendToEmail(BreachType breachType, void (*fp)(std::string)) {
+void Email::sendToEmail(BreachType breachType, void (*functionPointer)(std::string)) {
   const char* recepient = "a.b@c.com";
   if(breachType != NORMAL) {
     std::string outputMessage;
     outputMessage = "To: " + std::string(recepient) + "\n" + breachMessageMap[breachType];
-    fp(outputMessage);
+    (*functionPointer)(outputMessage);
   }
 }
 
 void checkAndAlert(
-    TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*fp)(std::string)) {
+    TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string)) {
 
   BreachType breachType = classifyTemperatureBreach(
     batteryChar.coolingType, temperatureInC
   );
-  targetSelected.targetInterface(breachType, fp);
+  targetSelected.targetInterface(breachType, functionPointer);
 }
