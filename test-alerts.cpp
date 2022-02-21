@@ -15,6 +15,7 @@ TEST_CASE("classify temperature breach according to cooling") {
 
 TEST_CASE("test interface class") {
   TargectSelector emailTarget(new Email());
+  Email::recepient = "";
   Email::setEmail("abc@mail.com");
   REQUIRE(Email::getEmail() == "abc@mail.com");
   REQUIRE(emailTarget.targetInterface(NORMAL) == "");

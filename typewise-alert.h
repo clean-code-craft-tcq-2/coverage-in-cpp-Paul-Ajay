@@ -44,9 +44,9 @@ public:
   static std::string getEmail() {
     return recepient;
   }
+  static std::string recepient;
 private:
   std::string sendToEmail(BreachType breachType);
-  static std::string recepient;
 };
 class TargectSelector {
 public:
