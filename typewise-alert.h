@@ -60,3 +60,5 @@ private:
 
 void checkAndAlert(
   TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string));
+
+void consolePrint(std::string stringToPrint);

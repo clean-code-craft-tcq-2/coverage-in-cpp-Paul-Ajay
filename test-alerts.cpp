@@ -22,3 +22,10 @@ TEST_CASE("test interface class") {
   REQUIRE(controllerTarget.targetInterface(NORMAL) == "feed : 0");
   REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
 }
+
+TEST_CASE("test temperature check and alert functionality") {
+  TargectSelector controllerTarget(new Controller());
+  BatteryCharacter battery;
+  battery.coolingType = PASSIVE_COOLING;
+  checkAndAlert(controllerTarget, battery, 40, *consolePrint);
+}
