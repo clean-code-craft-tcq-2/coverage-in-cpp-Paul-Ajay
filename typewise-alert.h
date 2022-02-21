@@ -38,18 +38,22 @@ public:
   virtual std::string sendOutput(BreachType breachType) {
     return sendToEmail(breachType);
   }
+  static void setEmail(std::string email) {
+    recepient = email;
+  }
+  static std::string getEmail() {
+    return recepient;
+  }
 private:
   std::string sendToEmail(BreachType breachType);
-  std::string recepient = "a.b@c.com";
+  static std::string recepient;
 };
 class TargectSelector {
 public:
   TargectSelector( AlertTargetClass * const targetObject) :
   targetObject(targetObject) 
   {}
-  std::string targetInterface(BreachType breachType) {
-    return targetObject->sendOutput(breachType);
-  }
+  std::string targetInterface(BreachType breachType);
 private:
   AlertTargetClass *targetObject;   
 };

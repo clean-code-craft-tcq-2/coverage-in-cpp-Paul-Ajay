@@ -11,3 +11,15 @@ TEST_CASE("infers the breach according to limits") {
 TEST_CASE("classify temperature breach according to cooling") {
   REQUIRE(classifyTemperatureBreach(CoolingType::PASSIVE_COOLING, 40) == TOO_HIGH);
 }
+
+
+TEST_CASE("test interface class") {
+  TargectSelector emailTarget(new Email());
+  Email::setEmail("abc@mail.com");
+  REQUIRE(Email::getEmail() == "abc@mail.com");
+  REQUIRE(emailTarget.targetInterface(NORMAL) == "");
+  REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com \n Hi, the temperature is too low");
+  TargectSelector controllerTarget(new Controller());
+  REQUIRE(controllerTarget.targetInterface(NORMAL) == "");
+  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
+}

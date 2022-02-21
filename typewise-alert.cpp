@@ -52,6 +52,10 @@ std::string Email::sendToEmail(BreachType breachType) {
   return outputMessage;
 }
 
+std::string TargectSelector::targetInterface(BreachType breachType) {
+  return this->targetObject->sendOutput(breachType);
+}
+
 void checkAndAlert(
     TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string)) {
 
