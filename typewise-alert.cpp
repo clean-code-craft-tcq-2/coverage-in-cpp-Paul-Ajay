@@ -46,7 +46,6 @@ std::map<BreachType, std::string> breachMessageMap = {
 std::string Email::sendToEmail(BreachType breachType) {
   std::string outputMessage = "";
   if(breachType != NORMAL) {
-    std::string outputMessage;
     outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
   }
   return outputMessage;
