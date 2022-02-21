@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 typedef enum {
   PASSIVE_COOLING,
