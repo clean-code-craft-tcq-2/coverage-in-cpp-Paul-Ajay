@@ -52,6 +52,8 @@ std::string Email::sendToEmail(BreachType breachType) {
   return outputMessage;
 }
 
+std::string Email::recepient = "";
+
 std::string TargectSelector::targetInterface(BreachType breachType) {
   return this->targetObject->sendOutput(breachType);
 }
