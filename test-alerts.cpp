@@ -20,10 +20,14 @@ TEST_CASE("test interface class") {
   REQUIRE(emailTarget.targetInterface(NORMAL) == "");
   REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
   TargectSelector controllerTarget(new Controller());
-  REQUIRE(controllerTarget.targetInterface(NORMAL) == "feed : 0");
+  REQUIRE(controllerTarget.targetInterface(NORMAL) == "");
   REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
 }
 
+TEST_CASE("test breach check") {
+  REQUIRE(isBreachOccurred(NORMAL) == false);
+  REQUIRE(isBreachOccurred(TOO_LOW) == true);
+}
 // TEST_CASE("test email class") {
 //   Email emailTarget;
 //   Email::setEmail("abc@mail.com");

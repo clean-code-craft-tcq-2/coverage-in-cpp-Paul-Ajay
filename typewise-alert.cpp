@@ -30,7 +30,13 @@ void consolePrint(std::string stringToPrint) {
   std::cout<<stringToPrint<<std::endl;
 }
 
+bool breachOccurted(BreachType breachType) {
+  return (breachType != NORMAL);
+}
+
 std::string Controller::sendToController(BreachType breachType) {
+  if(isBreachOccurred(breachType))
+    return "";
   const unsigned short header = 0xfeed;
   std::stringstream outputMessage;
   outputMessage << std::hex << header << " : " << std::hex << breachType;
@@ -43,10 +49,9 @@ std::map<BreachType, std::string> breachMessageMap = {
 };
 
 std::string Email::sendToEmail(BreachType breachType) {
-  std::string outputMessage = "";
-  if(breachType != NORMAL) {
-    outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
-  }
+  if(isBreachOccurred(breachType))
+    return "";
+  std::string outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
   return outputMessage;
 }
 
