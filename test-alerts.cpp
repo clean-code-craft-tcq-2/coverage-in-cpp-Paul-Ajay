@@ -27,9 +27,17 @@ TEST_CASE("test interface class") {
   REQUIRE(controllerTarget.targetInterface(TOO_LOW) == "feed : 1");
 }
 
+TEST_CASE("test cooling type validation functionality") {
+  REQUIRE(validateCoolingType(HI_ACTIVE_COOLING) == true);
+  REQUIRE(validateCoolingType(MED_ACTIVE_COOLING) == true);
+  REQUIRE(validateCoolingType(PASSIVE_COOLING) == true);
+  REQUIRE(validateCoolingType(INVALID) == false);
+}
 TEST_CASE("test temperature check and alert functionality") {
   TargectSelector controllerTarget(new Controller());
   BatteryCharacter battery;
   battery.coolingType = PASSIVE_COOLING;
-  checkAndAlert(controllerTarget, battery, 40, *consolePrint);
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
+  battery.coolingType = INVALID;
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
 }

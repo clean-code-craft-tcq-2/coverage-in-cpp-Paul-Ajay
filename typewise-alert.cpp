@@ -57,12 +57,16 @@ std::string TargectSelector::targetInterface(BreachType breachType) {
   return this->targetObject->sendOutput(breachType);
 }
 
-void checkAndAlert(
-    TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string)) {
+bool validateCoolingType(CoolingType coolingType) {
+  return (coolingType == PASSIVE_COOLING || coolingType == MED_ACTIVE_COOLING || coolingType == HI_ACTIVE_COOLING);
+}
 
-  BreachType breachType = classifyTemperatureBreach(
-    batteryChar.coolingType, temperatureInC
-  );
-  std::string outputMessage = targetSelected.targetInterface(breachType);
-  (*functionPointer)(outputMessage);
+AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string)) {
+  AlertStatus alertStatus = ALERTNOTREQUIRED;
+  if(validateCoolingType(batteryChar.coolingType)) {
+    BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
+    std::string outputMessage = targetSelected.targetInterface(breachType);
+    (*functionPointer)(outputMessage);
+    alertStatus = ALERTSEND;
+  }
 }

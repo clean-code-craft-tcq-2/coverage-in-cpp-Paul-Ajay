@@ -4,7 +4,8 @@
 typedef enum {
   PASSIVE_COOLING,
   HI_ACTIVE_COOLING,
-  MED_ACTIVE_COOLING
+  MED_ACTIVE_COOLING,
+  INVALID
 } CoolingType;
 
 typedef enum {
@@ -12,6 +13,11 @@ typedef enum {
   TOO_LOW,
   TOO_HIGH
 } BreachType;
+
+typedef enum {
+  ALERTSEND,
+  ALERTNOTREQUIRED
+}AlertStatus;
 
 BreachType inferBreach(double value, double lowerLimit, double upperLimit);
 BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC);
@@ -58,7 +64,9 @@ private:
   AlertTargetClass *targetObject;   
 };
 
-void checkAndAlert(
+bool validateCoolingType(CoolingType coolingType);
+
+AlertStatus checkAndAlert(
   TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string));
 
 void consolePrint(std::string stringToPrint);
