@@ -1,5 +1,10 @@
 #include "typewise-alert.h"
 #include <stdio.h>
+#include <map>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <sstream>
 
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   if(value < lowerLimit) {
@@ -11,61 +16,67 @@ BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   return NORMAL;
 }
 
-BreachType classifyTemperatureBreach(
-    CoolingType coolingType, double temperatureInC) {
-  int lowerLimit = 0;
-  int upperLimit = 0;
-  switch(coolingType) {
-    case PASSIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 35;
-      break;
-    case HI_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 45;
-      break;
-    case MED_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 40;
-      break;
-  }
-  return inferBreach(temperatureInC, lowerLimit, upperLimit);
+std::map<CoolingType, std::vector<int>> temperatureLimitMap {
+  {PASSIVE_COOLING, {0, 35}},
+  {HI_ACTIVE_COOLING, {0, 45}},
+  {MED_ACTIVE_COOLING, {0,40}}
+};
+
+BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) {
+  return inferBreach(temperatureInC, temperatureLimitMap[coolingType].at(0), temperatureLimitMap[coolingType].at(1));
 }
 
-void checkAndAlert(
-    AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
-
-  BreachType breachType = classifyTemperatureBreach(
-    batteryChar.coolingType, temperatureInC
-  );
-
-  switch(alertTarget) {
-    case TO_CONTROLLER:
-      sendToController(breachType);
-      break;
-    case TO_EMAIL:
-      sendToEmail(breachType);
-      break;
-  }
+void consolePrint(std::string stringToPrint) {
+  std::cout<<stringToPrint<<std::endl;
+  // countOfPrintCalls++;
 }
 
-void sendToController(BreachType breachType) {
+bool isBreachOccurred(BreachType breachType) {
+  return (breachType == TOO_LOW || breachType == TOO_HIGH);
+}
+
+std::string Controller::sendToController(BreachType breachType, functionPtr fPtr) {
   const unsigned short header = 0xfeed;
-  printf("%x : %x\n", header, breachType);
+  std::stringstream outputMessage;
+  outputMessage << std::hex << header << " : " << std::hex << breachType;
+  (*fPtr)(outputMessage.str());
+  return outputMessage.str();
 }
 
-void sendToEmail(BreachType breachType) {
-  const char* recepient = "a.b@c.com";
-  switch(breachType) {
-    case TOO_LOW:
-      printf("To: %s\n", recepient);
-      printf("Hi, the temperature is too low\n");
-      break;
-    case TOO_HIGH:
-      printf("To: %s\n", recepient);
-      printf("Hi, the temperature is too high\n");
-      break;
-    case NORMAL:
-      break;
+std::map<BreachType, std::string> breachMessageMap = {
+  {BreachType::TOO_LOW, "Hi, the temperature is too low"},
+  {BreachType::TOO_HIGH, "Hi, the temperature is too high"},
+  {BreachType::NORMAL, ""}
+};
+
+std::string Email::sendToEmail(BreachType breachType, functionPtr fPtr) {
+  std::string outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
+  (*fPtr)(outputMessage);
+  return outputMessage;
+}
+
+std::string Email::recepient = "";
+
+std::string TargectSelector::targetInterface(BreachType breachType, functionPtr fPtr) {
+  return this->targetObject->sendOutput(breachType, fPtr);
+}
+
+bool validateCoolingType(CoolingType coolingType) {
+  return (coolingType == PASSIVE_COOLING || coolingType == MED_ACTIVE_COOLING || coolingType == HI_ACTIVE_COOLING);
+}
+
+AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, functionPtr fPtr) {
+  AlertStatus alertStatus = NONE;
+  if(!validateCoolingType(batteryChar.coolingType)) {
+    return alertStatus;
   }
+  BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
+  if(!isBreachOccurred(breachType)) {
+    alertStatus = ALERT_NOT_REQUIRED;
+    return alertStatus;
+  } 
+  std::string outputMessage = targetSelected.targetInterface(breachType, fPtr);
+  // (*fPtr)(outputMessage);
+  alertStatus = ALERT_SEND;
+  return alertStatus;
 }
