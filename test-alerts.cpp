@@ -19,7 +19,7 @@ TEST_CASE("test interface class") {
   Email::setEmail("abc@mail.com");
   REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
   TargectSelector controllerTarget(new Controller());
-  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 1");
+  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
 }
 
 TEST_CASE("test breach check") {
