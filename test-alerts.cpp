@@ -17,9 +17,9 @@ TEST_CASE("classify temperature breach according to cooling") {
 TEST_CASE("test interface class") {
   TargectSelector emailTarget(new Email());
   Email::setEmail("abc@mail.com");
-  REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
+  REQUIRE(emailTarget.targetInterface(TOO_LOW, *consolePrint) == "To: abc@mail.com\nHi, the temperature is too low");
   TargectSelector controllerTarget(new Controller());
-  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
+  REQUIRE(controllerTarget.targetInterface(TOO_HIGH, *consolePrint) == "feed : 2");
 }
 
 TEST_CASE("test breach check") {
@@ -30,14 +30,14 @@ TEST_CASE("test email class") {
   Email emailTarget;
   Email::setEmail("abc@mail.com");
   REQUIRE(Email::getEmail() == "abc@mail.com");
-  REQUIRE(emailTarget.sendOutput(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
-  REQUIRE(emailTarget.sendOutput(TOO_HIGH) == "To: abc@mail.com\nHi, the temperature is too high");
+  REQUIRE(emailTarget.sendOutput(TOO_LOW, *consolePrint) == "To: abc@mail.com\nHi, the temperature is too low");
+  REQUIRE(emailTarget.sendOutput(TOO_HIGH, *consolePrint) == "To: abc@mail.com\nHi, the temperature is too high");
 }
 
 TEST_CASE("test controller class") {
   Controller controllerTarget;
-  REQUIRE(controllerTarget.sendOutput(TOO_HIGH) == "feed : 2");
-  REQUIRE(controllerTarget.sendOutput(TOO_LOW) == "feed : 1");  
+  REQUIRE(controllerTarget.sendOutput(TOO_HIGH, *consolePrint) == "feed : 2");
+  REQUIRE(controllerTarget.sendOutput(TOO_LOW, *consolePrint) == "feed : 1");  
 }
 
 TEST_CASE("test cooling type validation functionality") {
@@ -56,9 +56,9 @@ TEST_CASE("test temperature check and alert functionality") {
   TargectSelector controllerTarget(new Controller());
   BatteryCharacter battery;
   battery.coolingType = PASSIVE_COOLING;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 40) == ALERT_SEND);
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERT_SEND);
   battery.coolingType = INVALID;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 40) == NONE);
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == NONE);
   battery.coolingType = MED_ACTIVE_COOLING;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 10) == ALERT_NOT_REQUIRED);
+  REQUIRE(checkAndAlert(controllerTarget, battery, 10, *consolePrint) == ALERT_NOT_REQUIRED);
 }

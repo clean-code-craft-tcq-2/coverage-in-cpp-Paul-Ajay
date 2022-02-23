@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+using functionPtr = void (*)(std::string);
+
 typedef enum {
   PASSIVE_COOLING,
   HI_ACTIVE_COOLING,
@@ -30,20 +32,20 @@ typedef struct {
 
 class AlertTargetClass {
 public:
-  virtual std::string sendOutput(BreachType) = 0;
+  virtual std::string sendOutput(BreachType, functionPtr) = 0;
 };
 class Controller : public AlertTargetClass {
 public:
-  virtual std::string sendOutput(BreachType breachType) {
-    return sendToController(breachType);
+  virtual std::string sendOutput(BreachType breachType, functionPtr fPtr) {
+    return sendToController(breachType, fPtr);
   }
 private:
-  std::string sendToController(BreachType breachType);
+  std::string sendToController(BreachType breachType, functionPtr fPtr);
 };
 class Email : public AlertTargetClass {
 public:
-  virtual std::string sendOutput(BreachType breachType) {
-    return sendToEmail(breachType);
+  virtual std::string sendOutput(BreachType breachType, functionPtr fPtr) {
+    return sendToEmail(breachType, fPtr);
   }
   static void setEmail(std::string email) {
     recepient = email;
@@ -53,14 +55,14 @@ public:
   }
   static std::string recepient;
 private:
-  std::string sendToEmail(BreachType breachType);
+  std::string sendToEmail(BreachType breachType, functionPtr fPtr);
 };
 class TargectSelector {
 public:
   TargectSelector( AlertTargetClass * const targetObject) :
   targetObject(targetObject) 
   {}
-  std::string targetInterface(BreachType breachType);
+  std::string targetInterface(BreachType breachType, functionPtr);
 private:
   AlertTargetClass *targetObject;   
 };
@@ -68,9 +70,9 @@ private:
 bool validateCoolingType(CoolingType coolingType);
 
 AlertStatus checkAndAlert(
-  TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC);
+  TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, functionPtr);
 
 // int countOfPrintCalls = 0;
-// void consolePrint(std::string stringToPrint);
+void consolePrint(std::string stringToPrint);
 
 bool isBreachOccurred(BreachType breachType);

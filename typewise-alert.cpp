@@ -26,19 +26,20 @@ BreachType classifyTemperatureBreach(CoolingType coolingType, double temperature
   return inferBreach(temperatureInC, temperatureLimitMap[coolingType].at(0), temperatureLimitMap[coolingType].at(1));
 }
 
-// void consolePrint(std::string stringToPrint) {
-//   std::cout<<stringToPrint<<std::endl;
-//   // countOfPrintCalls++;
-// }
+void consolePrint(std::string stringToPrint) {
+  std::cout<<stringToPrint<<std::endl;
+  // countOfPrintCalls++;
+}
 
 bool isBreachOccurred(BreachType breachType) {
   return (breachType == TOO_LOW || breachType == TOO_HIGH);
 }
 
-std::string Controller::sendToController(BreachType breachType) {
+std::string Controller::sendToController(BreachType breachType, functionPtr fPtr) {
   const unsigned short header = 0xfeed;
   std::stringstream outputMessage;
   outputMessage << std::hex << header << " : " << std::hex << breachType;
+  (*fPtr)(outputMessage.str());
   return outputMessage.str();
 }
 
@@ -48,22 +49,23 @@ std::map<BreachType, std::string> breachMessageMap = {
   {BreachType::NORMAL, ""}
 };
 
-std::string Email::sendToEmail(BreachType breachType) {
+std::string Email::sendToEmail(BreachType breachType, functionPtr fPtr) {
   std::string outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
+  (*fPtr)(outputMessage);
   return outputMessage;
 }
 
 std::string Email::recepient = "";
 
-std::string TargectSelector::targetInterface(BreachType breachType) {
-  return this->targetObject->sendOutput(breachType);
+std::string TargectSelector::targetInterface(BreachType breachType, functionPtr fPtr) {
+  return this->targetObject->sendOutput(breachType, fPtr);
 }
 
 bool validateCoolingType(CoolingType coolingType) {
   return (coolingType == PASSIVE_COOLING || coolingType == MED_ACTIVE_COOLING || coolingType == HI_ACTIVE_COOLING);
 }
 
-AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC) {
+AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, functionPtr fPtr) {
   AlertStatus alertStatus = NONE;
   if(!validateCoolingType(batteryChar.coolingType)) {
     return alertStatus;
@@ -73,8 +75,8 @@ AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batte
     alertStatus = ALERT_NOT_REQUIRED;
     return alertStatus;
   } 
-  std::string outputMessage = targetSelected.targetInterface(breachType);
-  // (*functionPointer)(outputMessage);
+  std::string outputMessage = targetSelected.targetInterface(breachType, fPtr);
+  // (*fPtr)(outputMessage);
   alertStatus = ALERT_SEND;
   return alertStatus;
 }
