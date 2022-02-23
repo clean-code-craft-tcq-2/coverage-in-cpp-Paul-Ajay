@@ -46,11 +46,11 @@ TEST_CASE("test cooling type validation functionality") {
   REQUIRE(validateCoolingType(PASSIVE_COOLING) == true);
   REQUIRE(validateCoolingType(INVALID) == false);
 }
-// TEST_CASE("test temperature check and alert functionality") {
-//   TargectSelector controllerTarget(new Controller());
-//   BatteryCharacter battery;
-//   battery.coolingType = PASSIVE_COOLING;
-//   REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
-//   battery.coolingType = INVALID;
-//   REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
-// }
+TEST_CASE("test temperature check and alert functionality") {
+  TargectSelector controllerTarget(new Controller());
+  BatteryCharacter battery;
+  battery.coolingType = PASSIVE_COOLING;
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
+  battery.coolingType = INVALID;
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
+}
