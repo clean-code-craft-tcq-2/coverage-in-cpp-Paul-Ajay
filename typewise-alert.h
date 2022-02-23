@@ -68,9 +68,9 @@ private:
 bool validateCoolingType(CoolingType coolingType);
 
 AlertStatus checkAndAlert(
-  TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string));
+  TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC);
 
 // int countOfPrintCalls = 0;
-void consolePrint(std::string stringToPrint);
+// void consolePrint(std::string stringToPrint);
 
 bool isBreachOccurred(BreachType breachType);
