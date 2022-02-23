@@ -48,6 +48,9 @@ std::string Email::sendToEmail(BreachType breachType) {
   if(breachType != NORMAL) {
     outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
   }
+  else {
+    outputMessage = "";
+  }
   return outputMessage;
 }
 
@@ -62,12 +65,16 @@ bool validateCoolingType(CoolingType coolingType) {
 }
 
 AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string)) {
-  AlertStatus alertStatus = ALERTNOTREQUIRED;
+  AlertStatus alertStatus = NONE;
   if(validateCoolingType(batteryChar.coolingType)) {
     BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
     std::string outputMessage = targetSelected.targetInterface(breachType);
     (*functionPointer)(outputMessage);
     alertStatus = ALERTSEND;
+    return alertStatus;
+  } 
+  else {
+    alertStatus = ALERTNOTREQUIRED;
+    return alertStatus;
   }
-  return alertStatus;
 }

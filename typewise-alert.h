@@ -16,7 +16,8 @@ typedef enum {
 
 typedef enum {
   ALERTSEND,
-  ALERTNOTREQUIRED
+  ALERTNOTREQUIRED,
+  NONE
 }AlertStatus;
 
 BreachType inferBreach(double value, double lowerLimit, double upperLimit);
