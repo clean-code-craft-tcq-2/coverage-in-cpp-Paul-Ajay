@@ -38,6 +38,8 @@ TEST_CASE("test temperature check and alert functionality") {
   BatteryCharacter battery;
   battery.coolingType = PASSIVE_COOLING;
   REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
+  battery.coolingType = MED_ACTIVE_COOLING;
+  REQUIRE(checkAndAlert(controllerTarget, battery, 20, *consolePrint) == ALERTSEND);
   TargectSelector controllerTarget1(new Email());
   battery.coolingType = HI_ACTIVE_COOLING;
   REQUIRE(checkAndAlert(controllerTarget1, battery, -1, *consolePrint) == ALERTSEND);
