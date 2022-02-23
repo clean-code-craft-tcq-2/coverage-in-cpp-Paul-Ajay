@@ -70,7 +70,7 @@ bool validateCoolingType(CoolingType coolingType);
 AlertStatus checkAndAlert(
   TargectSelector targetSelected, BatteryCharacter batteryChar, double temperatureInC, void (*functionPointer)(std::string));
 
-int countOfPrintCalls = 0;
+// int countOfPrintCalls = 0;
 void consolePrint(std::string stringToPrint);
 
 bool isBreachOccurred(BreachType breachType);
