@@ -28,6 +28,7 @@ BreachType classifyTemperatureBreach(CoolingType coolingType, double temperature
 
 void consolePrint(std::string stringToPrint) {
   std::cout<<stringToPrint<<std::endl;
+  countOfPrintCalls++;
 }
 
 bool isBreachOccurred(BreachType breachType) {
