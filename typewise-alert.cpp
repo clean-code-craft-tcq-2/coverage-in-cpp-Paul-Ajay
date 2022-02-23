@@ -50,7 +50,7 @@ std::map<BreachType, std::string> breachMessageMap = {
 };
 
 std::string Email::sendToEmail(BreachType breachType, functionPtr fPtr) {
-  std::string outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
+  std::string outputMessage = "To: " + getEmail() + "\n" + breachMessageMap[breachType];
   (*fPtr)(outputMessage);
   return outputMessage;
 }
