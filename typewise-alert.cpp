@@ -30,7 +30,7 @@ void consolePrint(std::string stringToPrint) {
   std::cout<<stringToPrint<<std::endl;
 }
 
-bool breachOccurted(BreachType breachType) {
+bool isBreachOccurred(BreachType breachType) {
   return (breachType != NORMAL);
 }
 
