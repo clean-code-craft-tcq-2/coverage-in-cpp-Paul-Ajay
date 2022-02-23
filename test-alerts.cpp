@@ -17,9 +17,11 @@ TEST_CASE("classify temperature breach according to cooling") {
 TEST_CASE("test interface class") {
   TargectSelector emailTarget(new Email());
   Email::setEmail("abc@mail.com");
-  REQUIRE(emailTarget.targetInterface(NORMAL) == "");  
+  REQUIRE(emailTarget.targetInterface(NORMAL) == "");
+  REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
   TargectSelector controllerTarget(new Controller());
   REQUIRE(controllerTarget.targetInterface(NORMAL) == "feed : 0");
+  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
 }
 
 TEST_CASE("test email class") {
