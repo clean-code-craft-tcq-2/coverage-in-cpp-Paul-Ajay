@@ -22,8 +22,7 @@ std::map<CoolingType, std::vector<int>> temperatureLimitMap {
   {MED_ACTIVE_COOLING, {0,40}}
 };
 
-BreachType classifyTemperatureBreach(
-    CoolingType coolingType, double temperatureInC) {
+BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) {
   return inferBreach(temperatureInC, temperatureLimitMap[coolingType].at(0), temperatureLimitMap[coolingType].at(1));
 }
 
