@@ -48,9 +48,6 @@ std::string Email::sendToEmail(BreachType breachType) {
   if(breachType != NORMAL) {
     outputMessage = "To: " + this->recepient + "\n" + breachMessageMap[breachType];
   }
-  else {
-    outputMessage = "";
-  }
   return outputMessage;
 }
 
