@@ -32,12 +32,10 @@ TEST_CASE("test email class") {
   REQUIRE(Email::getEmail() == "abc@mail.com");
   REQUIRE(emailTarget.sendOutput(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
   REQUIRE(emailTarget.sendOutput(TOO_HIGH) == "To: abc@mail.com\nHi, the temperature is too high");
-  REQUIRE(emailTarget.sendOutput(NORMAL) == ""); 
 }
 
 TEST_CASE("test controller class") {
   Controller controllerTarget;
-  REQUIRE(controllerTarget.sendOutput(NORMAL) == "feed : 0");
   REQUIRE(controllerTarget.sendOutput(TOO_HIGH) == "feed : 2");
   REQUIRE(controllerTarget.sendOutput(TOO_LOW) == "feed : 1");  
 }
