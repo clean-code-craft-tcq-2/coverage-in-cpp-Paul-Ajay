@@ -44,24 +44,11 @@ TEST_CASE("test cooling type validation functionality") {
   REQUIRE(validateCoolingType(PASSIVE_COOLING) == true);
   REQUIRE(validateCoolingType(INVALID) == false);
 }
-TEST_CASE("test temperature check and alert functionality") {
-  TargectSelector controllerTarget(new Controller());
-  BatteryCharacter battery;
-  battery.coolingType = PASSIVE_COOLING;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
-  // battery.coolingType = MED_ACTIVE_COOLING;
-  // REQUIRE(checkAndAlert(controllerTarget, battery, 20, *consolePrint) == ALERTSEND);
-  // battery.coolingType = HI_ACTIVE_COOLING;
-  // REQUIRE(checkAndAlert(controllerTarget, battery, -10, *consolePrint) == ALERTSEND);
-  battery.coolingType = INVALID;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
-  // TargectSelector emailTarget(new Email());
-  // battery.coolingType = HI_ACTIVE_COOLING;
-  // REQUIRE(checkAndAlert(emailTarget, battery, -1, *consolePrint) == ALERTSEND);
-  // battery.coolingType = PASSIVE_COOLING;
-  // REQUIRE(checkAndAlert(emailTarget, battery, 40, *consolePrint) == ALERTSEND);
-  // battery.coolingType = MED_ACTIVE_COOLING;
-  // REQUIRE(checkAndAlert(emailTarget, battery, 20, *consolePrint) == ALERTSEND);
-  // battery.coolingType = INVALID;
-  // REQUIRE(checkAndAlert(emailTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
-}
+// TEST_CASE("test temperature check and alert functionality") {
+//   TargectSelector controllerTarget(new Controller());
+//   BatteryCharacter battery;
+//   battery.coolingType = PASSIVE_COOLING;
+//   REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
+//   battery.coolingType = INVALID;
+//   REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
+// }
