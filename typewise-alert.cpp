@@ -69,4 +69,5 @@ AlertStatus checkAndAlert(TargectSelector targetSelected, BatteryCharacter batte
     (*functionPointer)(outputMessage);
     alertStatus = ALERTSEND;
   }
+  return alertStatus;
 }
