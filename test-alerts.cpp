@@ -17,11 +17,9 @@ TEST_CASE("classify temperature breach according to cooling") {
 TEST_CASE("test interface class") {
   TargectSelector emailTarget(new Email());
   Email::setEmail("abc@mail.com");
-  REQUIRE(emailTarget.targetInterface(NORMAL) == "");
   REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
   TargectSelector controllerTarget(new Controller());
-  REQUIRE(controllerTarget.targetInterface(NORMAL) == "");
-  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
+  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 1");
 }
 
 TEST_CASE("test breach check") {
@@ -54,8 +52,10 @@ TEST_CASE("test temperature check and alert functionality") {
   TargectSelector controllerTarget(new Controller());
   BatteryCharacter battery;
   battery.coolingType = PASSIVE_COOLING;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
+  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERT_SEND);
   TargectSelector emailTarget(new Email());
   battery.coolingType = INVALID;
-  REQUIRE(checkAndAlert(emailTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
+  REQUIRE(checkAndAlert(emailTarget, battery, 40, *consolePrint) == NONE);
+  battery.coolingType = MED_ACTIVE_COOLING;
+  REQUIRE(checkAndAlert(emailTarget, battery, 10, *consolePrint) == ALERT_NOT_REQUIRED);
 }
