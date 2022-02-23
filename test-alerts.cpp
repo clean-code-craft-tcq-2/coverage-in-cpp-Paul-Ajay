@@ -49,10 +49,10 @@ TEST_CASE("test cooling type validation functionality") {
   REQUIRE(validateCoolingType(INVALID) == false);
 }
 
-TEST_CASE("test console print") {
-  consolePrint("test message");
-  REQUIRE(countOfPrintCalls == 1);
-}
+// TEST_CASE("test console print") {
+//   consolePrint("test message");
+//   REQUIRE(countOfPrintCalls == 1);
+// }
 
 // TEST_CASE("test temperature check and alert functionality") {
 //   TargectSelector controllerTarget(new Controller());
