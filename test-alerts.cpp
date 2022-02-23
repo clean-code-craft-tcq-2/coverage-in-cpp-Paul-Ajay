@@ -14,15 +14,15 @@ TEST_CASE("classify temperature breach according to cooling") {
   REQUIRE(classifyTemperatureBreach(CoolingType::PASSIVE_COOLING, 20) == NORMAL);
 }
 
-TEST_CASE("test interface class") {
-  TargectSelector emailTarget(new Email());
-  Email::setEmail("abc@mail.com");
-  REQUIRE(emailTarget.targetInterface(NORMAL) == "");
-  REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
-  TargectSelector controllerTarget(new Controller());
-  REQUIRE(controllerTarget.targetInterface(NORMAL) == "feed : 0");
-  REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
-}
+// TEST_CASE("test interface class") {
+//   TargectSelector emailTarget(new Email());
+//   Email::setEmail("abc@mail.com");
+//   REQUIRE(emailTarget.targetInterface(NORMAL) == "");
+//   REQUIRE(emailTarget.targetInterface(TOO_LOW) == "To: abc@mail.com\nHi, the temperature is too low");
+//   TargectSelector controllerTarget(new Controller());
+//   REQUIRE(controllerTarget.targetInterface(NORMAL) == "feed : 0");
+//   REQUIRE(controllerTarget.targetInterface(TOO_HIGH) == "feed : 2");
+// }
 
 TEST_CASE("test email class") {
   Email emailTarget;
@@ -51,6 +51,7 @@ TEST_CASE("test temperature check and alert functionality") {
   BatteryCharacter battery;
   battery.coolingType = PASSIVE_COOLING;
   REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTSEND);
+  TargectSelector emailTarget(new Email());
   battery.coolingType = INVALID;
-  REQUIRE(checkAndAlert(controllerTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
+  REQUIRE(checkAndAlert(emailTarget, battery, 40, *consolePrint) == ALERTNOTREQUIRED);
 }
